@@ -2,6 +2,9 @@
 name = "constrox-sdr-agent"
 version = "0.1.0"
 description = "Full-cycle Sales Development Agent for Constrox (offshore structural-engineering services), built on LangChain + LangGraph."
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Prithvi Karyampudi" }]
 requires-python = ">=3.11"
 dependencies = [
     "langgraph>=0.2.40",

@@ -1,5 +1,9 @@
 # Constrox Sales Development Agent
 
+[![CI](https://github.com/prithvikar/constrox-sdr-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/prithvikar/constrox-sdr-agent/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](pyproject.toml)
+
 A full-cycle **AI Sales Development agent** for [Constrox](https://constrox.com)
 (ASISA Technologies LLP) — an offshore structural-engineering services firm
 (steel detailing, BIM, estimation, rebar/precast/connection design). The agent
