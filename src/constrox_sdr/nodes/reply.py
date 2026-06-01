@@ -83,7 +83,8 @@ def classify_reply(state: SalesState, deps: Deps) -> dict:
     """Classify the inbound reply into a ReplyClass (LLM-first, heuristic fallback)."""
     text = state.get("inbound_reply") or ""
     try:
-        rc = models.structured("classify_reply", ReplyClass).invoke(text)
+        prompt = prompts.reply_classification_prompt(text) if prompts else text
+        rc = models.structured("classify_reply", ReplyClass).invoke(prompt)
     except Exception:
         rc = classify_reply_heuristic(text)
     if not isinstance(rc, ReplyClass):

@@ -220,6 +220,17 @@ pytest -m eval           # live LLM eval (needs an API key): reply-classificatio
                          # accuracy ≥0.85, lead-scoring tier precision ≥0.80
 ```
 
+The live eval makes ~95 calls. On Gemini's **free tier (20 requests/day/model)**
+that exceeds quota, so subsample and pace it:
+
+```bash
+EVAL_SAMPLE=12 EVAL_SLEEP=5 pytest -m eval    # 12 rows/test, 5s between calls
+```
+
+The eval **skips** (not fails) on `RESOURCE_EXHAUSTED`, so a quota cap is never
+mistaken for an accuracy regression. For the full 65-row run, use a paid tier or
+wait for the daily quota reset.
+
 ## Going to production (when Constrox shares access)
 
 Implement the real adapters in `adapters/constrox.py` against whatever Constrox

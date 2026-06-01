@@ -34,6 +34,16 @@ def _rows():
         return list(csv.DictReader(f))
 
 
+def _sampled(rows):
+    """Optionally subsample (evenly spaced) to stay within free-tier API quota.
+    Set EVAL_SAMPLE=N to evaluate N rows; EVAL_SLEEP=secs to pace calls."""
+    n = int(os.getenv("EVAL_SAMPLE", "0") or 0)
+    if n and n < len(rows):
+        step = len(rows) / n
+        rows = [rows[int(i * step)] for i in range(n)]
+    return rows
+
+
 def test_dataset_has_tier_spread():
     rows = _rows()
     tiers = {r["expected_tier"] for r in rows}
@@ -58,9 +68,11 @@ def test_heuristic_tier_accuracy_offline():
 @pytest.mark.eval
 @pytest.mark.skipif(not HAS_KEY, reason="no LLM API key set")
 def test_llm_scoring_precision():
+    import time
     from constrox_sdr import models
     from constrox_sdr.state import LeadScore
-    rows = _rows()
+    rows = _sampled(_rows())
+    sleep = float(os.getenv("EVAL_SLEEP", "0") or 0)
     correct = 0
     fabricator_dq = 0
     for r in rows:
@@ -72,10 +84,17 @@ def test_llm_scoring_precision():
             f"Company: {r['company']} | Title: {r['title']} | Segment: {r['segment']} | "
             f"Geo: {r['jurisdiction']} | Size: {r.get('size','')}"
         )
-        sc: LeadScore = models.structured("score", LeadScore).invoke(prompt)
+        try:
+            sc: LeadScore = models.structured("score", LeadScore).invoke(prompt)
+        except Exception as e:
+            if any(k in str(e) for k in ("RESOURCE_EXHAUSTED", "429", "quota")):
+                pytest.skip(f"LLM quota exhausted — rerun on fresh quota / paid tier: {str(e)[:80]}")
+            raise
         correct += int(sc.tier == r["expected_tier"])
         if r["segment"] == "fabricator" and sc.tier == "disqualify":
             fabricator_dq += 1
+        if sleep:
+            time.sleep(sleep)
     acc = correct / len(rows)
     assert fabricator_dq == 0, "LLM disqualified an ICP fabricator"
     assert acc >= 0.80, f"LLM tier precision below target: {acc:.2f}"

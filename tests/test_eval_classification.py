@@ -24,6 +24,16 @@ def _rows():
         return list(csv.DictReader(f))
 
 
+def _sampled(rows):
+    """Optionally subsample (evenly spaced) to stay within free-tier API quota.
+    Set EVAL_SAMPLE=N to evaluate N rows; EVAL_SLEEP=secs to pace calls."""
+    n = int(os.getenv("EVAL_SAMPLE", "0") or 0)
+    if n and n < len(rows):
+        step = len(rows) / n
+        rows = [rows[int(i * step)] for i in range(n)]
+    return rows
+
+
 def test_dataset_covers_all_intents():
     rows = _rows()
     intents = {r["intent"] for r in rows}
@@ -51,16 +61,22 @@ def test_heuristic_baseline_offline():
 @pytest.mark.eval
 @pytest.mark.skipif(not HAS_KEY, reason="no LLM API key set")
 def test_llm_classification_accuracy():
+    import time
     from constrox_sdr import models
-    rows = _rows()
+    from constrox_sdr.prompts import reply_classification_prompt
+    rows = _sampled(_rows())
+    sleep = float(os.getenv("EVAL_SLEEP", "0") or 0)
     correct = 0
     for r in rows:
-        prompt = (
-            "Classify this inbound reply from a B2B sales prospect (we sell offshore "
-            "structural steel detailing / BIM / estimation). Pick the single best intent "
-            f"and, if it is an objection, the objection_type.\n\nReply:\n{r['text']}"
-        )
-        rc: ReplyClass = models.structured("classify_reply", ReplyClass).invoke(prompt)
+        try:
+            rc: ReplyClass = models.structured("classify_reply", ReplyClass).invoke(
+                reply_classification_prompt(r["text"]))
+        except Exception as e:
+            if any(k in str(e) for k in ("RESOURCE_EXHAUSTED", "429", "quota")):
+                pytest.skip(f"LLM quota exhausted — rerun on fresh quota / paid tier: {str(e)[:80]}")
+            raise
         correct += int(rc.intent == r["intent"])
+        if sleep:
+            time.sleep(sleep)
     acc = correct / len(rows)
     assert acc >= 0.85, f"LLM intent accuracy below target: {acc:.2f}"

@@ -305,6 +305,35 @@ def objection_prompt(prospect: Prospect, objection_type: str) -> str:
     )
 
 
+def reply_classification_prompt(text: str) -> str:
+    """Guided prompt for classifying an inbound prospect reply.
+
+    Includes intent definitions to disambiguate the easily-confused cases
+    (interested vs meeting_request vs objection) and the objection sub-types.
+    """
+    return (
+        "You classify inbound replies from B2B prospects for Constrox, which sells "
+        "offshore structural steel detailing / BIM / estimation capacity to AEC firms.\n\n"
+        "Pick the SINGLE best intent:\n"
+        "- meeting_request: explicitly asks to book/schedule a call or proposes a time "
+        "('can we talk Thursday?', 'send a calendar invite').\n"
+        "- interested: positive / wants more info or pricing, but does NOT explicitly "
+        "propose a meeting time.\n"
+        "- objection: raises a concern, doubt, or blocker — quality/QA, code familiarity "
+        "(AISC/BS/AS), time-zone/turnaround, software compatibility (Tekla/SDS2/Revit), "
+        "liability/IP, an incumbent vendor, pricing, or wanting references/samples — even "
+        "when phrased as a question.\n"
+        "- referral: redirects you to a different person.\n"
+        "- not_interested: explicit no / not a fit / not now.\n"
+        "- ooo_autoreply: out-of-office or automated reply.\n"
+        "- unsubscribe: asks to be removed / to stop contact.\n\n"
+        "If (and only if) intent is 'objection', also set objection_type to one of: "
+        "quality_qa, code_familiarity, timezone, software_compat, liability_ip, incumbent, "
+        "pricing, trust_references.\n\n"
+        f"REPLY:\n{text}"
+    )
+
+
 def discovery_extract_prompt(notes: str) -> str:
     """Prompt for structured BANT extraction from discovery-call notes."""
     return (
