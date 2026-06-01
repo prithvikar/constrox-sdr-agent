@@ -1,0 +1,39 @@
+[project]
+name = "constrox-sdr-agent"
+version = "0.1.0"
+description = "Full-cycle Sales Development Agent for Constrox (offshore structural-engineering services), built on LangChain + LangGraph."
+requires-python = ">=3.11"
+dependencies = [
+    "langgraph>=0.2.40",
+    "langchain-core>=0.3.0",
+    "langchain-google-genai>=2.0",
+    "pydantic>=2.6",
+]
+
+[project.optional-dependencies]
+# Optional: set MODEL_PROVIDER=anthropic to use Claude instead of Gemini.
+anthropic = ["langchain-anthropic>=0.3.0"]
+prod = [
+    "langgraph-checkpoint-postgres>=2.0",
+    "psycopg[binary]>=3.1",
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+markers = [
+    "eval: hits the live LLM API; requires GOOGLE_API_KEY/GEMINI_API_KEY (deselect with -m 'not eval')",
+]
+testpaths = ["tests"]

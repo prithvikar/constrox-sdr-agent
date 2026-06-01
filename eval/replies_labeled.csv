@@ -1,0 +1,66 @@
+text,intent,objection_type
+"This is interesting, we're slammed on detailing right now. What does onboarding look like?",interested,
+"Yeah we're drowning in shop drawings this quarter. Send over more info and pricing.",interested,
+"Good timing actually, our in-house detailer just gave notice. Let's talk.",interested,
+"We could use extra capacity on connection design. Happy to learn more.",interested,
+"I've been meaning to look into outsourced detailing. Tell me how you handle Tekla models.",interested,
+"Sure, send me a one-pager and some references and we'll see if it's a fit.",interested,
+"We're bidding a big job and short on drafting hours. What's your turnaround?",interested,
+"Sounds promising. Can you walk me through your QA process?",interested,
+"Not for us right now, we keep all detailing in-house.",not_interested,
+"We're all set, thanks. No need to follow up.",not_interested,
+"Appreciate it but we don't outsource any drafting work.",not_interested,
+"No thanks, not something we're looking at this year.",not_interested,
+"We handle our own BIM internally, so I'll pass.",not_interested,
+"Not interested. Please stop emailing.",not_interested,
+"We tried offshore detailing before and it didn't work out. Pass.",not_interested,
+"Do your guys actually know AISC and our local fab practices?",objection,code_familiarity
+"Are your detailers familiar with AISC 360 and the latest connection design specs?",objection,code_familiarity
+"We work to BS 5950 and Eurocode 3 over here, can your team handle UK standards?",objection,code_familiarity
+"Most offshore shops don't understand AS 4100 or our AU welding codes.",objection,code_familiarity
+"How do I know your drawings won't be full of errors? Rework kills us.",objection,quality_qa
+"What's your QA process? We can't afford bad shop drawings hitting the floor.",objection,quality_qa
+"Last detailer we used had a 20% error rate. How do you check your work?",objection,quality_qa
+"Who's checking these models before they come back to us?",objection,quality_qa
+"The time zone difference is going to be a nightmare for coordination.",objection,timezone
+"If your team is in India, how do we get same-day answers during our shift?",objection,timezone
+"We need overlap with our US working hours, not emails answered at 3am.",objection,timezone
+"Do you model in Tekla? We're a 100% Tekla shop and won't switch.",objection,software_compat
+"We run SDS2 here. Can your detailers actually work in SDS2 natively?",objection,software_compat
+"Our GC requires Revit-coordinated models. Are you set up for that workflow?",objection,software_compat
+"We use Advance Steel, not Tekla. Is that a problem for your team?",objection,software_compat
+"If there's a detailing error that causes a field issue, who's liable?",objection,liability_ip
+"What about our IP? These are proprietary connection details we can't have leaked.",objection,liability_ip
+"Do you carry professional indemnity insurance for errors and omissions?",objection,liability_ip
+"How do you protect our drawings and client data once it's offshore?",objection,liability_ip
+"We already use an offshore detailer in Vietnam, why would we switch?",objection,incumbent
+"We've got a detailing partner we've used for years. We're happy with them.",objection,incumbent
+"Already have an outsourced shop in the Philippines we like.",objection,incumbent
+"We're locked in with our current BIM vendor through next year.",objection,incumbent
+"How much does this cost? We're very price sensitive on detailing.",objection,pricing
+"What's your rate per ton? Our margins are thin and offshore needs to be cheap.",objection,pricing
+"If you're not cheaper than our current detailer there's no point talking.",objection,pricing
+"Send me pricing first. If it's not competitive I'm not interested.",objection,pricing
+"Send me some sample Tekla drawings first so I can judge the quality.",objection,trust_references
+"Can you give me references from other fabricators you've worked with?",objection,trust_references
+"Never heard of Constrox. Who else in the US do you detail for?",objection,trust_references
+"Show me a portfolio and a couple of fab shop references before we go further.",objection,trust_references
+"I'm not the right person for this, you'll want to talk to our chief estimator, Dave.",referral,
+"This should really go to our detailing manager. I'll forward you their email.",referral,
+"Not my department, try our preconstruction lead Sarah.",referral,
+"You'd be better off speaking with our VDC manager about this.",referral,
+"I've moved off projects, reach out to our new operations director.",referral,
+"Out of office until Monday with limited email access.",ooo_autoreply,
+"I am currently traveling and will respond to your message after the 15th.",ooo_autoreply,
+"Thank you for your email. I'm on annual leave until next week.",ooo_autoreply,
+"Automatic reply: I'm away from the office and will reply upon my return.",ooo_autoreply,
+"remove me from your list",unsubscribe,
+"Please unsubscribe me, I don't want any more of these.",unsubscribe,
+"Stop emailing me. Take me off your mailing list.",unsubscribe,
+"Reply STOP to opt out? Consider this me opting out.",unsubscribe,
+"Unsubscribe. Do not contact me again.",unsubscribe,
+"Can you do a quick call Thursday?",meeting_request,
+"Let's set up 30 minutes next week to go through this. What's your availability?",meeting_request,
+"Free for a call Tuesday afternoon? Send me a calendar invite.",meeting_request,
+"Let's book a demo. I want to see your Tekla output live.",meeting_request,
+"Can we get on a Teams call this week so I can loop in my detailing manager?",meeting_request,
